@@ -1,0 +1,115 @@
+from test import test
+
+def init(n: int):
+    """Recoit en argument un entier n (le nombre de disques), et qui renvoie la liste représentant la configuration initiale du plateau"""
+    discs = []
+    for i in range (n, 0, -1):
+        discs.append(i)
+
+    return [discs, [], []]
+
+
+def nbDisques(plateau: list[list[int]], numtour: int):
+    """Renvoie le nombre de disques sur la tour indiquée"""
+    if 0 < numtour > 2:
+        return f"ERROR : Numtour must be between 0 and 2"
+    return len(plateau[numtour])
+
+
+def disqueSup(plateau: list[list[int]], numtour: int):
+    """Renvoie le numéro du disque au sommet de la tour indiquée"""
+    if not plateau[numtour] or len(plateau[numtour]) == 0:
+        return -1
+    return plateau[numtour][len(plateau[numtour]) - 1]
+
+
+def posDisque(plateau: list[list[int]], numdisque: int):
+    """Renvoie le numéro de la tour sur laquelle se trouve un disque"""
+    if numdisque in plateau[0]:
+        return 0
+    elif numdisque in plateau[1]:
+        return 1
+    elif numdisque in plateau[2]:
+        return 2
+    else:
+        return -1
+
+
+def posDisque_edited(plateau, numdisque):
+    for tour in plateau:
+        for disc in tour:
+            if numdisque == disc:
+                return plateau.index(tour), tour.index(disc)    # retourne d'abord la n-tour, et ensuite la n-position dans la tour
+
+
+def verifDepl(plateau: list[list[int]], nt1: int, nt2: int):
+    """Renvoie True si le déplacement est autorisé et False sinon"""
+    # Si il n'y a pas de disques sur la tour de départ, erreur
+    if len(plateau[nt1]) < 1:
+        return False
+
+    if len(plateau[nt2]) == 0:
+        return True
+
+    if len(plateau[nt2]) > 0:
+        disc1 = plateau[nt1][len(plateau[nt1]) - 1]
+        disc2 = plateau[nt2][len(plateau[nt2]) - 1]
+        # Si le disque sur la tour d'arrivée est plus petit que celui sur la tour de départ, erreur
+        if disc2 < disc1:
+            return False
+        return True
+    return False
+
+
+def verifVictoire(plateau: list[list[int]], n: int):
+    """Renvoie True si la victoire a été atteinte et False sinon"""
+    if len(plateau[0]) > 0 or len(plateau[1]) > 0:
+        return False
+
+    expectedTower = []
+    for i in range (n, 0, -1):
+        expectedTower.append(i)
+
+    if plateau[2] != expectedTower:
+        return False
+
+    return True
+
+
+
+
+
+# TESTS BELOW, DO NOT DELETE
+if __name__ == "__main__":
+    # TESTS
+
+    # test fonction init
+    test(init(4), [[4, 3, 2, 1], [], []], 1)
+    test(init(0), [[], [], []], 2)
+
+    # test fonction nbDisques
+    test(nbDisques([[], [], []], 4),"ERROR : Numtour must be between 0 and 2", 3)
+    test(nbDisques([[3, 2, 1], [], [4]], 0),3, 4)
+    test(nbDisques([[3, 2, 1], [], [4]], 1),0, 5)
+
+    # test fonction disqueSup
+    test(disqueSup([[3, 2, 1], [], [4]], 0), 1, 6)
+    test(disqueSup([[3, 2, 1], [], [4]], 1), -1, 7)
+    test(disqueSup([[3, 2, 1], [], [4]], 2), 4, 8)
+
+    # test fonction posDisque
+    test(posDisque([[3, 2, 1], [], [4]], 4), 2, 9)
+    test(posDisque([[3, 2, 1], [], [4]], 2), 0, 10)
+    test(posDisque([[3, 2, 1], [], [4]], 5), -1, 11)
+
+    # test fonction verifDepl
+    test(verifDepl([[2, 1], [], [3]], 0, 2), True, 12)
+    test(verifDepl([[2], [3], [1]], 0, 2), False, 13)
+    test(verifDepl([[2], [], [3, 1]], 0, 1), True, 14)
+
+    # test fonction verifVictoire
+    test(verifVictoire([[], [], [3, 2, 1]], 3), True, 15)
+    test(verifVictoire([[4], [], [3, 2, 1]], 3), False, 16)
+    test(verifVictoire([[], [], [4, 3, 2, 1]], 3), False, 17)
+    test(verifVictoire([[], [], [1, 2, 3]], 3), False, 18)
+    test(verifVictoire([[], [], [4, 3, 2, 1]], 4), True, 19)
