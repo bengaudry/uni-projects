@@ -1,0 +1,14 @@
+*.o
+*.eps
+*.h.gch
+test_contour
+test_geometrie
+test_geometrie_distance
+test_image
+test_mult_contours
+test_postscript
+test_postscript_bezier2
+test_postscript_bezier3
+test_simplification
+test_simplification_bezier
+main
