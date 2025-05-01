@@ -1,0 +1,15 @@
+*.o
+test_plateau
+test_listes
+test_logique
+test_modelisation
+test_export_dimacs
+test_encodage_dimacs
+test_sat_solver
+*.dimacs
+jeu
+afficher_modelisation
+afficher_solution
+convertisseur_3sat
+.tmp
+.nfs*
